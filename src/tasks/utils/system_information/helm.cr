@@ -1,13 +1,15 @@
 require "file_utils"
 require "colorize"
 require "totem"
+require "kubectl_client"
+require "../../../utils/utils.cr"
+require "../../../../utils/helm/helm.cr"
 
-# TODO put this in a module
 def helm_installation(verbose=false)
   gmsg = "No Global helm version found"
   lmsg = "No Local helm version found"
   ghelm = helm_global_response
-  VERBOSE_LOGGING.info ghelm if verbose
+  Log.info { ghelm } if verbose
 
   global_helm_version = helm_version(ghelm, verbose)
 
@@ -19,7 +21,7 @@ def helm_installation(verbose=false)
   end
 
   lhelm = helm_local_response
-  VERBOSE_LOGGING.info lhelm if verbose
+  Log.info { lhelm } if verbose
 
   local_helm_version = helm_version(lhelm, verbose)
 
@@ -45,19 +47,18 @@ end
 
 def helm_global_response(verbose=false)
   helm_response = `helm version 2>/dev/null`
-  VERBOSE_LOGGING.info helm_response if verbose
+  Log.info { helm_response } if verbose
   helm_response
 end
 
 def helm_local_response(verbose=false)
-  helm = BinarySingleton.local_helm_path
-  result = ShellCmd.run("#{helm} version", "helm_local_version", force_output: verbose)
+  result = KubectlClient::ShellCmd.run("#{local_helm_path} version", "helm_local_version", force_output: verbose)
   result[:output]
 end
 
 def helm_version(helm_response, verbose=false)
   resp = "#{helm_v2_version(helm_response) || helm_v3_version(helm_response)}"
-  VERBOSE_LOGGING.info resp if verbose
+  Log.info { resp } if verbose
   resp
 end
 
@@ -66,7 +67,7 @@ def helm_v2_version(helm_response)
   # example
   # Client: &version.Version{SemVer:\"v2.14.3\", GitCommit:\"0e7f3b6637f7af8fcfddb3d2941fcc7cbebb0085\", GitTreeState:\"clean\"}\nServer: &version.Version{SemVer:\"v2.16.1\", GitCommit:\"bbdfe5e7803a12bbdf97e94cd847859890cf4050\", GitTreeState:\"clean\"}
   helm_v2 = helm_response.match /Client: &version.Version{SemVer:\"(v([0-9]{1,3}[\.]){1,2}[0-9]{1,3}).+"/
-  LOGGING.debug "helm_v2?: #{helm_v2}"
+  Log.debug {"helm_v2?: #{helm_v2}"}
   helm_v2 && helm_v2.not_nil![1]
 end
 

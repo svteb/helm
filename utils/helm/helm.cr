@@ -1,6 +1,6 @@
-require "colorize"
+require "kubectl_client"
+require "../../src/utils/utils.cr"
 
-BinarySingleton = BinaryReference.new
 class BinaryReference 
   # CNF_DIR = "cnfs"
   @helm: String?
@@ -26,12 +26,6 @@ class BinaryReference
     helm_v3 && helm_v3.not_nil![1]
   end
 
-
-  def local_helm_path
-    current_dir = FileUtils.pwd
-    helm = "#{current_dir}/#{TOOLS_DIR}/helm/linux-amd64/helm"
-  end
-
   # Get helm directory
   def helm
     @helm ||= global_helm_installed? ? "helm" : local_helm_path
@@ -39,6 +33,8 @@ class BinaryReference
 end
 
 module Helm
+
+  BinarySingleton = BinaryReference.new
 
   #TODO move to kubectlclient
   DEPLOYMENT="Deployment"
@@ -57,21 +53,6 @@ module Helm
     HelmDirectory
     ManifestDirectory 
     Invalid
-  end
-
-  module ShellCmd
-    def self.run(cmd, log_prefix)
-      Log.info { "#{log_prefix} command: #{cmd}" }
-      status = Process.run(
-        cmd,
-        shell: true,
-        output: output = IO::Memory.new,
-        error: stderr = IO::Memory.new
-      )
-      Log.debug { "#{log_prefix} output: #{output.to_s}" }
-      Log.debug { "#{log_prefix} stderr: #{stderr.to_s}" }
-      {status: status, output: output.to_s, error: stderr.to_s}
-    end
   end
 
   def self.install_method_by_config_src(install_method : InstallMethod, config_src : String) : InstallMethod
@@ -158,11 +139,11 @@ module Helm
     helm = BinarySingleton.helm
     Log.info { "Helm::generate_manifest_from_templates command: #{helm} template #{release_name} #{helm_chart} > #{output_file}" }
 
-    ShellCmd.run("ls -alR #{helm_chart}", "before generate")
-    ShellCmd.run("ls -alR cnfs", "before generate")
+    KubectlClient::ShellCmd.run("ls -alR #{helm_chart}", "before generate")
+    KubectlClient::ShellCmd.run("ls -alR cnfs", "before generate")
     resp = Helm.template(release_name, helm_chart, output_file, namespace, helm_values)
-    ShellCmd.run("ls -alR #{helm_chart}", "after generate")
-    ShellCmd.run("ls -alR cnfs", "after generate")
+    KubectlClient::ShellCmd.run("ls -alR #{helm_chart}", "after generate")
+    KubectlClient::ShellCmd.run("ls -alR cnfs", "after generate")
 
     Log.debug { "generate_manifest_from_templates output_file: #{output_file}" }
     [resp[:status].success?, output_file]
