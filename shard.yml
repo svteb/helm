@@ -1,0 +1,23 @@
+name: helm
+version: 0.1.0
+
+authors:
+  - William Harris <wharris@upscalews.com>
+  - W. Watson <Watson@vulk.coop>
+  - Denver Williams <denver@debian.nz>
+
+targets:
+  helmi:
+    main: helm.cr
+
+crystal: '>= 1.0.0'
+
+dependencies:
+  totem:
+    github: icyleaf/totem
+    version: ~> 0.7.0
+  kubectl_client:
+    github: cnf-testsuite/kubectl_client
+    branch: main
+
+license: MIT
