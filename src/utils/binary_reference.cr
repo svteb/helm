@@ -1,4 +1,6 @@
 require "./utils.cr"
+require "./system_information.cr"
+
 class BinaryReference 
 	@helm: String?
 
