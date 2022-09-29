@@ -10,8 +10,8 @@ describe "Helm" do
       helm_local_cleanup
     end
 
-    it "'SystemInfo::Helm.global_helm_installed?' should return the information about the helm installation", tags: ["helm-utils"]  do
-      (SystemInfo::Helm.global_helm_installed?).should be_true
+    it "'Helm::SystemInfo.global_helm_installed?' should return the information about the helm installation", tags: ["helm-utils"]  do
+      (Helm::SystemInfo.global_helm_installed?).should be_true
     end
 
     it "local helm should not be detected", tags: ["helm-utils"]  do
@@ -36,8 +36,8 @@ describe "Helm" do
       install_local_helm
     end
     
-    it "'SystemInfo::Helm.local_helm_installed?' should return the information about the helm installation", tags: ["helm-utils"]  do
-      (SystemInfo::Helm.local_helm_installed?).should be_true
+    it "'Helm::SystemInfo.local_helm_installed?' should return the information about the helm installation", tags: ["helm-utils"]  do
+      (Helm::SystemInfo.local_helm_installed?).should be_true
     end
     
     it "'Helm::BinarySingleton.installation_found?' should find installation", tags: ["helm-utils"]  do

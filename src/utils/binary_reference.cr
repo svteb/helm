@@ -4,7 +4,7 @@ class BinaryReference
 
 
 	def global_helm_installed?
-		SystemInfo::Helm.global_helm_installed?
+		Helm::SystemInfo.global_helm_installed?
 	end
 
 	def helm_global_response(verbose=false)
@@ -23,7 +23,7 @@ class BinaryReference
 	end
 
 	def local_helm_installed?
-		SystemInfo::Helm.local_helm_installed?
+		Helm::SystemInfo.local_helm_installed?
 	end
 
 

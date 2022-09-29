@@ -83,25 +83,26 @@ end
 #TODO Get version number of global response for helm
 #TODO If version of helm not 3 or greater, act as if helm is not installed
 #TODO If version of helm is 3, return helm installed
-
-module SystemInfo::Helm
-  def self.global_helm_installed?
-    ghelm = helm_global_response
-    global_helm_version = helm_v3_version(ghelm)
-    if (global_helm_version)
-      true
-    else
-      false
+module Helm
+  class SystemInfo
+    def self.global_helm_installed?
+      ghelm = helm_global_response
+      global_helm_version = helm_v3_version(ghelm)
+      if (global_helm_version)
+        true
+      else
+        false
+      end
     end
-  end
 
-  def self.local_helm_installed?
-    lhelm = helm_local_response
-    local_helm_version = helm_v3_version(lhelm)
-    if (local_helm_version)
-      true
-    else
-      false
+    def self.local_helm_installed?
+      lhelm = helm_local_response
+      local_helm_version = helm_v3_version(lhelm)
+      if (local_helm_version)
+        true
+      else
+        false
+      end
     end
   end
 end
