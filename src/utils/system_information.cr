@@ -85,6 +85,9 @@ end
 #TODO If version of helm is 3, return helm installed
 module Helm
   class SystemInfo
+    def self.helm_installation_info(verbose=false)
+      helm_installation(verbose)
+    end
     def self.global_helm_installed?
       ghelm = helm_global_response
       global_helm_version = helm_v3_version(ghelm)

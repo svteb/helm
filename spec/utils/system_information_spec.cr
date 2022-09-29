@@ -10,6 +10,10 @@ describe "Helm" do
       helm_local_cleanup
     end
 
+    it "'helm_installation_info()' should return the information about the helm installation", tags: ["kubectl-utils"] do
+      (Helm::SystemInfo.helm_installation_info(true)).should contain("helm found")
+    end
+
     it "'Helm::SystemInfo.global_helm_installed?' should return the information about the helm installation", tags: ["helm-utils"]  do
       (Helm::SystemInfo.global_helm_installed?).should be_true
     end
@@ -34,6 +38,10 @@ describe "Helm" do
   describe "local" do
     before_all do
       install_local_helm
+    end
+    
+    it "'helm_installation_info()' should return the information about the helm installation", tags: ["kubectl-utils"] do
+      (Helm::SystemInfo.helm_installation_info(true)).should contain("helm found")
     end
     
     it "'Helm::SystemInfo.local_helm_installed?' should return the information about the helm installation", tags: ["helm-utils"]  do
