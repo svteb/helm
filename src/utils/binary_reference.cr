@@ -2,6 +2,7 @@ require "./utils.cr"
 class BinaryReference 
 	@helm: String?
 
+
 	def global_helm_installed?
 		SystemInfo::Helm.global_helm_installed?
 	end
@@ -21,8 +22,13 @@ class BinaryReference
 		"helm"
 	end
 
-	def local_helm_exists?
+	def local_helm_installed?
 		SystemInfo::Helm.local_helm_installed?
+	end
+
+
+	def installation_found?
+		global_helm_installed? || local_helm_installed?
 	end
 	
 	def local_helm

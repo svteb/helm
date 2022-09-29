@@ -7,7 +7,7 @@ describe "Helm" do
     end
 
     it "local helm should not be detected", tags: ["helm-utils"]  do
-      (Helm::BinarySingleton.local_helm_exists?).should be_false
+      (Helm::BinarySingleton.local_helm_installed?).should be_false
     end
 
     it "'Helm.helm_repo_add' should work", tags: ["helm-utils"]  do
@@ -27,7 +27,7 @@ describe "Helm" do
     end
 
     it "local helm should be detected", tags: ["helm-utils"]  do
-      (Helm::BinarySingleton.local_helm_exists?).should be_true
+      (Helm::BinarySingleton.local_helm_installed?).should be_true
     end
     
     it "'Helm.helm_repo_add' should work", tags: ["helm-utils"]  do

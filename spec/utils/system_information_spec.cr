@@ -10,12 +10,16 @@ describe "Helm" do
       helm_local_cleanup
     end
 
-    it "local helm should not be detected", tags: ["helm-utils"]  do
-      (Helm::BinarySingleton.local_helm_exists?).should be_false
-    end
-
     it "'SystemInfo::Helm.global_helm_installed?' should return the information about the helm installation", tags: ["helm-utils"]  do
       (SystemInfo::Helm.global_helm_installed?).should be_true
+    end
+
+    it "local helm should not be detected", tags: ["helm-utils"]  do
+      (Helm::BinarySingleton.local_helm_installed?).should be_false
+    end
+    
+    it "'Helm::BinarySingleton.installation_found?' should find installation", tags: ["helm-utils"]  do
+      (Helm::BinarySingleton.installation_found?).should be_true
     end
     
     it "'helm_global_response()' should return the information about the helm installation", tags: ["helm-utils"]  do
@@ -35,6 +39,10 @@ describe "Helm" do
     it "'SystemInfo::Helm.local_helm_installed?' should return the information about the helm installation", tags: ["helm-utils"]  do
       (SystemInfo::Helm.local_helm_installed?).should be_true
     end
+    
+    it "'Helm::BinarySingleton.installation_found?' should find installation", tags: ["helm-utils"]  do
+      (Helm::BinarySingleton.installation_found?).should be_true
+    end
 
     it "'helm_local_response()' should return the information about the helm installation", tags: ["helm-utils"]  do
       Helm::ShellCmd.run("ls -R tools/helm", "helm_dir_check", force_output: true)
@@ -47,7 +55,7 @@ describe "Helm" do
     end
 
     it "local helm should be detected", tags: ["helm-utils"]  do
-      (Helm::BinarySingleton.local_helm_exists?).should be_true
+      (Helm::BinarySingleton.local_helm_installed?).should be_true
     end 
   end
 end
