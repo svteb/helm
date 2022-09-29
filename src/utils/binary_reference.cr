@@ -3,13 +3,7 @@ class BinaryReference
 	@helm: String?
 
 	def global_helm_installed?
-		ghelm = helm_global_response
-		global_helm_version = helm_v3_version(ghelm)
-		if (global_helm_version)
-		true
-		else
-		false
-		end
+		SystemInfo::Helm.global_helm_installed?
 	end
 
 	def helm_global_response(verbose=false)
@@ -28,7 +22,7 @@ class BinaryReference
 	end
 
 	def local_helm_exists?
-		File.exists?(local_helm)
+		SystemInfo::Helm.local_helm_installed?
 	end
 	
 	def local_helm
