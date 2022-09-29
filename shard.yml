@@ -19,5 +19,8 @@ dependencies:
   kubectl_client:
     github: cnf-testsuite/kubectl_client
     branch: main
+  tar:
+    github: cnf-testsuite/tar
+    branch: main
 
 license: MIT

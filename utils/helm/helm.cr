@@ -1,36 +1,6 @@
 require "kubectl_client"
 require "../../src/utils/utils.cr"
-
-class BinaryReference 
-  # CNF_DIR = "cnfs"
-  @helm: String?
-
-  def global_helm_installed?
-    ghelm = helm_global_response
-    global_helm_version = helm_v3_version(ghelm)
-    if (global_helm_version)
-      true
-    else
-      false
-    end
-  end
-
-  def helm_global_response(verbose=false)
-    Process.run("helm version", shell: true, output: stdout = IO::Memory.new, error: stderr = IO::Memory.new)
-    stdout.to_s
-  end
-
-  def helm_v3_version(helm_response)
-    # version.BuildInfo{Version:"v3.1.1", GitCommit:"afe70585407b420d0097d07b21c47dc511525ac8", GitTreeState:"clean", GoVersion:"go1.13.8"}
-    helm_v3 = helm_response.match /BuildInfo{Version:\"(v([0-9]{1,3}[\.]){1,2}[0-9]{1,3}).+"/
-    helm_v3 && helm_v3.not_nil![1]
-  end
-
-  # Get helm directory
-  def helm
-    @helm ||= global_helm_installed? ? "helm" : local_helm_path
-  end
-end
+require "./binary_reference.cr"
 
 module Helm
 
@@ -53,6 +23,29 @@ module Helm
     HelmDirectory
     ManifestDirectory 
     Invalid
+  end
+
+  module ShellCmd
+    def self.run(cmd, log_prefix, force_output=false)
+      Log.info { "#{log_prefix} command: #{cmd}" }
+      status = Process.run(
+        cmd,
+        shell: true,
+        output: output = IO::Memory.new,
+        error: stderr = IO::Memory.new
+      )
+      if force_output == false
+        Log.debug { "#{log_prefix} output: #{output.to_s}" }
+      else
+        Log.info { "#{log_prefix} output: #{output.to_s}" }
+      end
+
+      # Don't have to output log line if stderr is empty
+      if stderr.to_s.size > 1
+        Log.info { "#{log_prefix} stderr: #{stderr.to_s}" }
+      end
+      {status: status, output: output.to_s, error: stderr.to_s}
+    end
   end
 
   def self.install_method_by_config_src(install_method : InstallMethod, config_src : String) : InstallMethod
@@ -139,11 +132,11 @@ module Helm
     helm = BinarySingleton.helm
     Log.info { "Helm::generate_manifest_from_templates command: #{helm} template #{release_name} #{helm_chart} > #{output_file}" }
 
-    KubectlClient::ShellCmd.run("ls -alR #{helm_chart}", "before generate")
-    KubectlClient::ShellCmd.run("ls -alR cnfs", "before generate")
+    Helm::ShellCmd.run("ls -alR #{helm_chart}", "before generate")
+    Helm::ShellCmd.run("ls -alR cnfs", "before generate")
     resp = Helm.template(release_name, helm_chart, output_file, namespace, helm_values)
-    KubectlClient::ShellCmd.run("ls -alR #{helm_chart}", "after generate")
-    KubectlClient::ShellCmd.run("ls -alR cnfs", "after generate")
+    Helm::ShellCmd.run("ls -alR #{helm_chart}", "after generate")
+    Helm::ShellCmd.run("ls -alR cnfs", "after generate")
 
     Log.debug { "generate_manifest_from_templates output_file: #{output_file}" }
     [resp[:status].success?, output_file]

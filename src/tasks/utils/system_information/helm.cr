@@ -52,7 +52,7 @@ def helm_global_response(verbose=false)
 end
 
 def helm_local_response(verbose=false)
-  result = KubectlClient::ShellCmd.run("#{local_helm_path} version", "helm_local_version", force_output: verbose)
+  result = Helm::ShellCmd.run("#{local_helm_full_path} version", "helm_local_version", force_output: verbose)
   result[:output]
 end
 
