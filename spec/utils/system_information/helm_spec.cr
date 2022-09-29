@@ -10,6 +10,10 @@ describe "Helm" do
       helm_local_cleanup
     end
 
+    it "local helm should not be detected", tags: ["helm-utils"]  do
+      (Helm::BinarySingleton.local_helm_exists?).should be_false
+    end
+
     it "'helm_global_response()' should return the information about the helm installation", tags: ["helm-utils"]  do
       (SystemInfo::Helm.global_helm_installed?).should be_true
     end
@@ -43,6 +47,10 @@ describe "Helm" do
     it "'helm_version()' should return the information about the helm version", tags: ["helm-utils"]  do
       Helm::ShellCmd.run("ls -R tools/helm", "helm_dir_check", force_output: true)
       (helm_version(helm_local_response)).should contain("v3.")
+    end
+
+    it "local helm should be detected", tags: ["helm-utils"]  do
+      (Helm::BinarySingleton.local_helm_exists?).should be_true
     end
     
     it "'Helm.helm_repo_add' should work", tags: ["helm-utils"]  do

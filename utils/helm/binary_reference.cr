@@ -1,5 +1,5 @@
+require "../../src/utils/utils.cr"
 class BinaryReference 
-	# CNF_DIR = "cnfs"
 	@helm: String?
 
 	def global_helm_installed?
@@ -25,6 +25,10 @@ class BinaryReference
 
 	def global_helm
 		"helm"
+	end
+
+	def local_helm_exists?
+		File.exists?(local_helm)
 	end
 	
 	def local_helm
