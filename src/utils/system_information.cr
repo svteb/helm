@@ -2,8 +2,8 @@ require "file_utils"
 require "colorize"
 require "totem"
 require "kubectl_client"
-require "../../../utils/utils.cr"
-require "../../../../utils/helm/helm.cr"
+require "./utils.cr"
+require "../../helm.cr"
 
 def helm_installation(verbose=false)
   gmsg = "No Global helm version found"

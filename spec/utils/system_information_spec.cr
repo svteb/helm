@@ -1,8 +1,8 @@
 require "kubectl_client"
-require "../../spec_helper"
+require "../spec_helper"
 require "colorize"
-require "../../../src/utils/utils.cr"
-require "../../../src/tasks/utils/system_information/helm.cr"
+require "../../src/utils/utils.cr"
+require "../../src/utils/system_information.cr"
 
 describe "Helm" do
   describe "global" do

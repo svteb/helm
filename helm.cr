@@ -1,6 +1,6 @@
 require "kubectl_client"
-require "../../src/utils/utils.cr"
-require "./binary_reference.cr"
+require "./src/utils/utils.cr"
+require "./src/utils/binary_reference.cr"
 
 module Helm
 

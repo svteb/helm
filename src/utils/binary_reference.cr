@@ -1,4 +1,4 @@
-require "../../src/utils/utils.cr"
+require "./utils.cr"
 class BinaryReference 
 	@helm: String?
 
