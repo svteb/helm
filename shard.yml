@@ -1,5 +1,5 @@
 name: helm
-version: 0.1.0
+version: 1.0.1
 
 authors:
   - William Harris <wharris@upscalews.com>
@@ -18,7 +18,7 @@ dependencies:
     version: ~> 0.7.0
   kubectl_client:
     github: cnf-testsuite/kubectl_client
-    branch: main
+    version: ~> 1.0.0
   tar:
     github: cnf-testsuite/tar
     branch: main
