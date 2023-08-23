@@ -41,6 +41,7 @@ def binary_path
 end
 
 def local_helm_full_path
+  return ENV["CUSTOM_HELM_PATH"] if ENV["CUSTOM_HELM_PATH"]?
   "#{FileUtils.pwd}/#{binary_path}"
 end
 
