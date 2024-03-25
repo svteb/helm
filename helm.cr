@@ -256,15 +256,20 @@ module Helm
     Log.info { "kind_exists?: #{kind}" }
     resource_ymls = CNFManager.cnf_workload_resources(args, config) do |resource|
       resource
+      Log.info { "this is resource: #{resource}" }
     end
 
     default_namespace = "default"
     if !config.cnf_config[:helm_install_namespace].empty?
+      Log.info { "some cnf_config is empty" }
       default_namespace = config.cnf_config[:helm_install_namespace]
     end
     resource_names = Helm.workload_resource_kind_names(resource_ymls, default_namespace: default_namespace)
+    Log.info { "resource_names: #{resource_names}" }
     found = false
-		resource_names.each do | resource |
+    
+    resource_names.each do | resource |
+      Log.info { "resource[:kind].downcase: #{resource[:kind].downcase} == #{kind.downcase}" }
       if resource[:kind].downcase == kind.downcase
         found = true
       end
